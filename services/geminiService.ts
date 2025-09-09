@@ -7,16 +7,17 @@ if (!process.env.API_KEY) {
 }
 
 const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
-const model = ai.models.get({ model: "gemini-2.5-flash-image-preview" });
 
 export async function editImageWithGemini(imagePart: Part, textPrompt: string): Promise<EditedImageResult> {
   try {
+    const model = await ai.models.get({ model: "gemini-2.0-flash-exp" });
     const textPart = { text: textPrompt };
 
-    const response = await model.generateContent({
-      contents: {
+    const response = await (model as any).generateContent({
+      contents: [{
+        role: "user", 
         parts: [imagePart, textPart]
-      },
+      }],
       config: {
         responseModalities: [Modality.IMAGE, Modality.TEXT],
       },
