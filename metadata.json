@@ -1,0 +1,5 @@
+{
+  "name": "나노바나나 이미지 편집기 (Nano Banana Image Editor)",
+  "description": "Gemini의 'gemini-2.5-flash-image-preview' (나노바나나) 모델을 사용하여 이미지를 업로드하고 텍스트 프롬프트로 편집하세요. 이미지에 객체를 추가하거나, 스타일을 변경하거나, 배경을 바꾸는 등 다양한 작업을 할 수 있습니다.",
+  "requestFramePermissions": []
+}
