@@ -164,3 +164,111 @@ export const generateModelAds = async (productFile: File, modelFile: File): Prom
 
     return imageUrls;
 };
+import { GoogleGenerativeAI } from '@google/genai';
+
+const API_KEY = process.env.GEMINI_API_KEY;
+
+if (!API_KEY) {
+    throw new Error('GEMINI_API_KEY environment variable is not set');
+}
+
+const genAI = new GoogleGenerativeAI(API_KEY);
+
+const fileToBase64 = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => {
+            const result = reader.result as string;
+            resolve(result.split(',')[1]); // Remove data:image/xxx;base64, prefix
+        };
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+    });
+};
+
+export const generateMockups = async (productFile: File): Promise<string[]> => {
+    const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+    
+    const base64Image = await fileToBase64(productFile);
+    
+    const prompt = `
+    Create 4 professional product mockups for this product image. Generate diverse and creative scenarios:
+    1. A minimalist lifestyle setting
+    2. A professional business environment
+    3. A cozy home environment
+    4. An outdoor/nature setting
+    
+    Make sure each mockup looks realistic and professionally designed. The product should be the main focus in each scene.
+    `;
+
+    try {
+        const result = await model.generateContent([
+            prompt,
+            {
+                inlineData: {
+                    data: base64Image,
+                    mimeType: productFile.type
+                }
+            }
+        ]);
+
+        // This is a placeholder implementation
+        // In a real implementation, you would process the AI response
+        // and return actual image URLs or base64 strings
+        return [
+            `data:${productFile.type};base64,${base64Image}`,
+            `data:${productFile.type};base64,${base64Image}`,
+            `data:${productFile.type};base64,${base64Image}`,
+            `data:${productFile.type};base64,${base64Image}`
+        ];
+    } catch (error) {
+        console.error('Error generating mockups:', error);
+        throw new Error('Failed to generate mockups');
+    }
+};
+
+export const generateModelAds = async (productFile: File, modelFile: File): Promise<string[]> => {
+    const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+    
+    const productBase64 = await fileToBase64(productFile);
+    const modelBase64 = await fileToBase64(modelFile);
+    
+    const prompt = `
+    Create 3 professional advertising images combining this product with this model:
+    1. A fashion magazine style advertisement
+    2. A lifestyle social media post
+    3. A professional product showcase
+    
+    Make the advertisements look natural and professional. The model should be wearing or using the product in a realistic way.
+    `;
+
+    try {
+        const result = await model.generateContent([
+            prompt,
+            {
+                inlineData: {
+                    data: productBase64,
+                    mimeType: productFile.type
+                }
+            },
+            {
+                inlineData: {
+                    data: modelBase64,
+                    mimeType: modelFile.type
+                }
+            }
+        ]);
+
+        // This is a placeholder implementation
+        // In a real implementation, you would process the AI response
+        // and return actual image URLs or base64 strings
+        return [
+            `data:${productFile.type};base64,${productBase64}`,
+            `data:${modelFile.type};base64,${modelBase64}`,
+            `data:${productFile.type};base64,${productBase64}`
+        ];
+    } catch (error) {
+        console.error('Error generating model ads:', error);
+        throw new Error('Failed to generate model advertisements');
+    }
+};
