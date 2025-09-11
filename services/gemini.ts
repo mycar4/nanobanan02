@@ -29,19 +29,43 @@ const generateContentWithRetry = async (
 ): Promise<GenerateContentResponse> => {
     try {
         const response = await ai.models.generateContent(params);
-        const imagePart = response.candidates?.[0]?.content?.parts?.find(part => part.inlineData);
+        
+        const candidate = response.candidates?.[0];
+
+        // 1. Check if a candidate was returned. This can happen if the request is blocked.
+        if (!candidate) {
+            const blockReason = response.promptFeedback?.blockReason;
+            if (blockReason) {
+                throw new Error(`Request was blocked by API. Reason: ${blockReason}`);
+            }
+            throw new Error("API returned no candidates in the response.");
+        }
+        
+        // 2. Check for a non-OK finish reason from the model
+        if (candidate.finishReason && candidate.finishReason !== 'STOP') {
+            throw new Error(`Image generation stopped prematurely. Reason: ${candidate.finishReason}.`);
+        }
+        
+        // 3. Find the image part in the response
+        const imagePart = candidate.content?.parts?.find(part => part.inlineData);
         if (!imagePart || !imagePart.inlineData) {
+            // If no image, log any text response for debugging.
+            const textPart = candidate.content?.parts?.find(part => part.text);
+            if (textPart) {
+                console.warn("Model returned text instead of an image:", textPart.text);
+            }
             throw new Error("API call succeeded but returned no image data.");
         }
+
         return response;
     } catch (error) {
         if (retries > 0) {
-            console.warn(`Image generation failed, retrying... (${retries} attempts left). Error:`, error);
-            await new Promise(resolve => setTimeout(resolve, 500)); // Short delay before retry
+            console.warn(`Image generation attempt failed, retrying... (${retries} attempts left). Error:`, error);
+            await new Promise(resolve => setTimeout(resolve, 1000)); // Increased delay before retry
             return generateContentWithRetry(params, retries - 1);
         } else {
             console.error("Image generation failed after multiple retries.", error);
-            throw error;
+            throw error; // Re-throw the error to be caught by the calling function.
         }
     }
 };
@@ -52,12 +76,13 @@ export const generateMockups = async (file: File): Promise<string[]> => {
     const model = 'gemini-2.5-flash-image-preview';
 
     const generationPromises = MOCKUP_PROMPTS.map(prompt => {
+        const uniquePrompt = `${prompt} (Style variation ID: ${Math.random()})`;
         const params = {
             model,
             contents: {
                 parts: [
                     imagePart,
-                    { text: prompt },
+                    { text: uniquePrompt },
                 ],
             },
             config: {
@@ -98,13 +123,14 @@ export const generateModelAds = async (productFile: File, modelFile: File): Prom
     const model = 'gemini-2.5-flash-image-preview';
     
     const generationPromises = MODEL_ADVERTISING_PROMPTS.map(prompt => {
+        const uniquePrompt = `${prompt} (스타일 변형 ID: ${Math.random()})`;
         const params = {
             model,
             contents: {
                 parts: [
                     productPart,
                     modelPart,
-                    { text: prompt },
+                    { text: uniquePrompt },
                 ],
             },
             config: {
