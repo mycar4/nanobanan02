@@ -1,0 +1,5 @@
+{
+  "name": "차성종의 AI 스튜디오",
+  "description": "제품 이미지를 업로드하면 AI가 가장 잘 어울리는 광고 이미지 목업을 5장 생성해주는 서비스입니다. 구글의 Gemini API를 사용하여 멋진 제품 사진을 만들어보세요.",
+  "requestFramePermissions": []
+}
