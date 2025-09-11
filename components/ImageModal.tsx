@@ -7,70 +7,6 @@ interface ImageModalProps {
 
 export const ImageModal: React.FC<ImageModalProps> = ({ src, onClose }) => {
     useEffect(() => {
-        const handleEscape = (event: KeyboardEvent) => {
-            if (event.key === 'Escape') {
-                onClose();
-            }
-        };
-
-        document.addEventListener('keydown', handleEscape);
-        document.body.style.overflow = 'hidden';
-
-        return () => {
-            document.removeEventListener('keydown', handleEscape);
-            document.body.style.overflow = 'unset';
-        };
-    }, [onClose]);
-
-    const handleDownload = () => {
-        const link = document.createElement('a');
-        link.href = src;
-        link.download = `generated-image-${Date.now()}.png`;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-    };
-
-    return (
-        <div
-            className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50 p-4"
-            onClick={onClose}
-        >
-            <div className="relative max-w-4xl max-h-full">
-                <img
-                    src={src}
-                    alt="Full size"
-                    className="max-w-full max-h-full object-contain rounded-lg"
-                    onClick={(e) => e.stopPropagation()}
-                />
-                <div className="absolute top-4 right-4 flex space-x-2">
-                    <button
-                        onClick={handleDownload}
-                        className="bg-green-600 hover:bg-green-700 text-white p-2 rounded-full transition-colors"
-                        title="다운로드"
-                    >
-                        📥
-                    </button>
-                    <button
-                        onClick={onClose}
-                        className="bg-red-600 hover:bg-red-700 text-white p-2 rounded-full transition-colors"
-                        title="닫기"
-                    >
-                        ✕
-                    </button>
-                </div>
-            </div>
-        </div>
-    );
-};
-
-interface ImageModalProps {
-    src: string;
-    onClose: () => void;
-}
-
-export const ImageModal: React.FC<ImageModalProps> = ({ src, onClose }) => {
-    useEffect(() => {
         const handleKeyDown = (event: KeyboardEvent) => {
             if (event.key === 'Escape') {
                 onClose();
@@ -115,7 +51,7 @@ export const ImageModal: React.FC<ImageModalProps> = ({ src, onClose }) => {
             </style>
             <div 
                 className="relative"
-                onClick={(e) => e.stopPropagation()} // Prevent closing when clicking on the content
+                onClick={(e) => e.stopPropagation()}
             >
                 <div className="flex flex-col items-center gap-4">
                     <img 

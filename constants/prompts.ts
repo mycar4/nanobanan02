@@ -1,3 +1,4 @@
+
 export const MOCKUP_PROMPTS: string[] = [
   "Create a surreal dreamscape advertisement. The product should float among glowing celestial bodies and pastel-colored clouds. Use ethereal lighting to give it a magical, otherworldly quality.",
   "Design a futuristic, cyberpunk-inspired ad. Place the product on a holographic display in a neon-lit, rain-slicked city street at night. The scene should feel high-tech, edgy, and cinematic.",
@@ -15,12 +16,6 @@ export const MODEL_ADVERTISING_PROMPTS: string[] = [
 ];
 
 export const LOADING_MESSAGES: string[] = [
-    "제품 이미지를 분석하고 있어요... 🧐",
-    "광고 컨셉을 구상하는 중... 🧠",
-    "AI가 픽셀을 그리고 있어요... 🎨",
-    "최고의 결과물을 완성하고 있습니다... ✨"
-];
-export const LOADING_MESSAGES = [
     "AI가 열심히 작업 중입니다... 🤖",
     "창의적인 아이디어를 생각하고 있어요... 💡",
     "픽셀들을 하나씩 그리고 있습니다... 🎨",

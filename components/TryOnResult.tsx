@@ -1,3 +1,4 @@
+
 import React from 'react';
 
 interface TryOnResultProps {
@@ -8,7 +9,7 @@ interface TryOnResultProps {
 }
 
 const handleDownload = (e: React.MouseEvent, src: string) => {
-    e.stopPropagation(); // Important to prevent the modal from opening
+    e.stopPropagation();
     const link = document.createElement('a');
     link.href = src;
     const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
@@ -43,7 +44,6 @@ const ResultImageCard: React.FC<{ src: string; alt: string; onClick: () => void;
     </div>
 );
 
-
 export const TryOnResult: React.FC<TryOnResultProps> = ({ productImage, modelImage, resultImages, onImageClick }) => {
     if (resultImages.length === 0) {
         return (
@@ -77,84 +77,6 @@ export const TryOnResult: React.FC<TryOnResultProps> = ({ productImage, modelIma
                     ))}
                 </div>
             </div>
-        </div>
-    );
-};
-import React from 'react';
-
-interface TryOnResultProps {
-    productImage: string | null;
-    modelImage: string | null;
-    resultImages: string[];
-    onImageClick: (src: string) => void;
-}
-
-export const TryOnResult: React.FC<TryOnResultProps> = ({ 
-    productImage, 
-    modelImage, 
-    resultImages, 
-    onImageClick 
-}) => {
-    if (!productImage && !modelImage && resultImages.length === 0) {
-        return (
-            <div className="text-center text-gray-400">
-                <p className="text-lg">제품과 모델 이미지를 업로드하고 생성 버튼을 눌러주세요! ✨</p>
-            </div>
-        );
-    }
-
-    return (
-        <div className="w-full">
-            {(productImage || modelImage) && (
-                <div className="mb-6">
-                    <h3 className="text-lg font-semibold mb-3 text-gray-300">업로드된 이미지</h3>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        {productImage && (
-                            <div>
-                                <p className="text-sm text-gray-400 mb-2">제품 이미지</p>
-                                <img
-                                    src={productImage}
-                                    alt="Product"
-                                    className="w-full h-32 object-contain rounded-lg border border-gray-600 cursor-pointer hover:border-purple-500 transition-colors"
-                                    onClick={() => onImageClick(productImage)}
-                                />
-                            </div>
-                        )}
-                        {modelImage && (
-                            <div>
-                                <p className="text-sm text-gray-400 mb-2">모델 이미지</p>
-                                <img
-                                    src={modelImage}
-                                    alt="Model"
-                                    className="w-full h-32 object-contain rounded-lg border border-gray-600 cursor-pointer hover:border-purple-500 transition-colors"
-                                    onClick={() => onImageClick(modelImage)}
-                                />
-                            </div>
-                        )}
-                    </div>
-                </div>
-            )}
-
-            {resultImages.length > 0 && (
-                <div>
-                    <h3 className="text-lg font-semibold mb-3 text-gray-300">생성된 광고 이미지 ({resultImages.length}개)</h3>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        {resultImages.map((result, index) => (
-                            <div key={index} className="relative group">
-                                <img
-                                    src={result}
-                                    alt={`Generated ad ${index + 1}`}
-                                    className="w-full h-48 object-cover rounded-lg border border-gray-600 cursor-pointer hover:border-cyan-500 transition-colors"
-                                    onClick={() => onImageClick(result)}
-                                />
-                                <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all rounded-lg flex items-center justify-center">
-                                    <span className="text-white opacity-0 group-hover:opacity-100 transition-opacity">클릭하여 확대</span>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            )}
         </div>
     );
 };
