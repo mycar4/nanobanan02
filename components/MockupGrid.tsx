@@ -67,7 +67,6 @@ export const MockupGrid: React.FC<MockupGridProps> = ({ originalImage, mockups, 
         </div>
     );
 };
-import React from 'react';
 
 interface MockupGridProps {
     originalImage: string | null;
