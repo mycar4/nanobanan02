@@ -1,3 +1,4 @@
+
 import React from 'react';
 
 interface MockupGridProps {
@@ -7,7 +8,7 @@ interface MockupGridProps {
 }
 
 const handleDownload = (e: React.MouseEvent, src: string) => {
-    e.stopPropagation(); // Important to prevent the modal from opening
+    e.stopPropagation();
     const link = document.createElement('a');
     link.href = src;
     const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
@@ -38,7 +39,6 @@ const ImageCard: React.FC<{ src: string; alt: string; isOriginal?: boolean; onCl
     </div>
 );
 
-
 export const MockupGrid: React.FC<MockupGridProps> = ({ originalImage, mockups, onImageClick }) => {
     if (mockups.length === 0) {
         return (
@@ -56,7 +56,7 @@ export const MockupGrid: React.FC<MockupGridProps> = ({ originalImage, mockups, 
         <div className="grid grid-cols-2 md:grid-cols-3 gap-4 w-full">
             {originalImage && (
                 <div className="md:col-span-1">
-                    <ImageCard src={originalImage} alt="Original product" isOriginal onClick={() => {}} />
+                    <ImageCard src={originalImage} alt="Original product" isOriginal onClick={() => onImageClick(originalImage)} />
                 </div>
             )}
             {mockups.map((mockup, index) => (
@@ -67,4 +67,3 @@ export const MockupGrid: React.FC<MockupGridProps> = ({ originalImage, mockups, 
         </div>
     );
 };
-
