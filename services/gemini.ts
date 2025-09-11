@@ -2,7 +2,7 @@
 import { GoogleGenAI, Modality, GenerateContentResponse } from "@google/genai";
 import { MOCKUP_PROMPTS, MODEL_ADVERTISING_PROMPTS } from '../constants/prompts';
 
-const API_KEY = process.env.API_KEY;
+const API_KEY = process.env.GEMINI_API_KEY;
 
 if (!API_KEY) {
     throw new Error("API_KEY environment variable is not set.");
