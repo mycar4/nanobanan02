@@ -51,7 +51,7 @@ export const ImageModal: React.FC<ImageModalProps> = ({ src, onClose }) => {
             </style>
             <div 
                 className="relative"
-                onClick={(e) => e.stopPropagation()}
+                onClick={(e) => e.stopPropagation()} // Prevent closing when clicking on the content
             >
                 <div className="flex flex-col items-center gap-4">
                     <img 

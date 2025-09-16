@@ -1,4 +1,3 @@
-
 import React from 'react';
 
 interface TryOnResultProps {
@@ -9,7 +8,7 @@ interface TryOnResultProps {
 }
 
 const handleDownload = (e: React.MouseEvent, src: string) => {
-    e.stopPropagation();
+    e.stopPropagation(); // Important to prevent the modal from opening
     const link = document.createElement('a');
     link.href = src;
     const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
@@ -43,6 +42,7 @@ const ResultImageCard: React.FC<{ src: string; alt: string; onClick: () => void;
         </button>
     </div>
 );
+
 
 export const TryOnResult: React.FC<TryOnResultProps> = ({ productImage, modelImage, resultImages, onImageClick }) => {
     if (resultImages.length === 0) {
